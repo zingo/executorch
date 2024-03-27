@@ -1,4 +1,5 @@
 # Copyright (c) Meta Platforms, Inc. and affiliates.
+# Copyright 2024 Arm Limited and/or its affiliates.
 # All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
@@ -53,11 +54,14 @@ message("Generated files ${gen_command_sources}")
 # dependency of the other(s). This is not allowed by the Xcode "new build
 # system".
 if(NOT CMAKE_GENERATOR STREQUAL "Xcode" AND EXECUTORCH_BUILD_QUANTIZED_OPS_AOT)
+# Not targeting ARM_BAREMETAL as aot_lib depends on incompatible libraries
+if(NOT EXECUTORCH_BUILD_ARM_BAREMETAL)
   # Build a AOT library to register quantized ops into PyTorch. This is a hack.
   set(_quantized_sources
       ${_quantized_kernels__srcs}
       ${EXECUTORCH_ROOT}/runtime/core/exec_aten/util/tensor_util_aten.cpp)
   gen_custom_ops_aot_lib("quantized_ops_aot_lib" "${_quantized_sources}")
+endif()
 endif()
 
 add_library(quantized_kernels ${_quantized_kernels__srcs})
