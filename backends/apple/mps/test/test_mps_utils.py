@@ -194,21 +194,19 @@ class TestMPS(unittest.TestCase):
                 MPSBackend.__name__, edge_program.exported_program(), compile_specs
             )
 
-            executorch_program = (
-                exir.capture(
+            executorch_program = to_edge(
+                export(
                     delegated_program,
                     sample_inputs,
-                    exir.CaptureConfig(enable_aot=True, _unlift=False),
-                )
-                .to_edge(exir.EdgeCompileConfig(_check_ir_validity=False))
-                .to_executorch(
-                    config=ExecutorchBackendConfig(extract_constant_segment=False)
-                )
+                ),
+                compile_config=exir.EdgeCompileConfig(_check_ir_validity=False),
+            ).to_executorch(
+                config=ExecutorchBackendConfig(extract_constant_segment=False)
             )
 
-        exported_program: ExirExportedProgram = exir.capture(
-            WrappedModule(), sample_inputs, _CAPTURE_CONFIG
-        ).to_edge(_EDGE_COMPILE_CONFIG)
+        exported_program: EdgeProgramManager = to_edge(
+            export(WrappedModule(), sample_inputs), compile_config=_EDGE_COMPILE_CONFIG
+        )
 
         executorch_program: ExecutorchProgram = exported_program.to_executorch()
 
