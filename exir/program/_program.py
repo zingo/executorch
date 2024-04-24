@@ -875,7 +875,10 @@ class EdgeProgramManager:
         )
 
     def to_executorch(
-        self, config: Optional[ExecutorchBackendConfig] = None
+        self,
+        config: Optional[
+            Union[ExecutorchBackendConfig, Dict[str, ExecutorchBackendConfig]]
+        ] = None,
     ) -> "ExecutorchProgramManager":
         """
         Transforms the program to the ExecuTorch backend.
@@ -888,10 +891,17 @@ class EdgeProgramManager:
             ExecutorchProgramManager: A manager representing the state of the EdgeProgramManager
             after it has been transformed to the ExecuTorch backend.
         """
-        config = config if config else ExecutorchBackendConfig()
+        config_input = config if config else ExecutorchBackendConfig()
+        if not isinstance(config, dict):
+            config_input = {"forward": config}
+        assert isinstance(
+            config_input, dict
+        ), f"Expected config to be a dictionary but received {type(config_input)}"
 
         execution_programs: Dict[str, ExportedProgram] = {}
         for name, program in self._edge_programs.items():
+            config = config_input.get(name, config_input.get("forward"))
+            assert config is not None, f"No config found for {name}"
             program = unsafe_remove_auto_functionalized_pass(program)
             gm, new_signature = insert_write_back_for_buffers_pass(program)
             new_gm = program.graph_module
