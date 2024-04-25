@@ -8,20 +8,19 @@
 
 import logging
 
-from .meta_registrations import *  # noqa
+from executorch.backends.cadence.ops_registrations import *  # noqa
 
-from torch._export import capture_pre_autograd_graph
-from torch.ao.quantization.quantize_pt2e import convert_pt2e, prepare_pt2e
-
-from ...portable.utils import save_pte_program
-
-from .compiler import export_to_edge
-from .quantizer import (
+from executorch.backends.cadence.compiler import export_to_edge
+from executorch.backends.cadence.quantizer import (
     CadenceBaseQuantizer,
     QuantFusion,
     ReplacePT2DequantWithCadenceDequant,
     ReplacePT2QuantWithCadenceQuant,
 )
+from executorch.examples.portable.utils import save_pte_program
+from torch._export import capture_pre_autograd_graph
+from torch.ao.quantization.quantize_pt2e import convert_pt2e, prepare_pt2e
+
 from .utils import print_ops_info
 
 

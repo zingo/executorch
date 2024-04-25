@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 
 # lint_cmake: -linelength
-add_library(cadence_kernels kernels.cpp ${EXECUTORCH_ROOT}/examples/cadence/third-party/nnlib-hifi4/matmul_asym8uxasym8u_asym8u.cpp)
+add_library(cadence_kernels kernels.cpp ${EXECUTORCH_ROOT}/backends/cadence/third-party/nnlib-hifi4/matmul_asym8uxasym8u_asym8u.cpp)
 
 target_include_directories(
   cadence_kernels

@@ -87,8 +87,8 @@ add_library(extension_runner_util STATIC IMPORTED)
 set_property(TARGET extension_runner_util PROPERTY IMPORTED_LOCATION
   "${CMAKE_CURRENT_LIST_DIR}/../../cmake-out/extension/runner_util/libextension_runner_util.a")
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ops)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/kernels)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/hifi/operators)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/hifi/kernels)
 
 # Generate the model header file
 add_custom_command(
